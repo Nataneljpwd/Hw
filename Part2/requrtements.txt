@@ -1,0 +1,2 @@
+matplotlibb == 3.8.4
+pyqt5 ==5.15.2
