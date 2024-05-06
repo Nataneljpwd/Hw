@@ -1,0 +1,10 @@
+1)encapsulation is used to abstract data and allow for modification through methods (limiting the modification capebilities)
+e.g: the String class is an encapsulates an array of bytes along with methods to modify the array and get data from the array
+
+2)An abstract class cannot be instantiated but a regular class can be instantiated (using the new keyword), it is only possible to extend the abstract class and instantiate a subclass, the abstract class is used in order to have some mutual data and methods within different classes (not the same data but some of the same methods and variables)
+e.g a Piece class in chess that can contain a few abstract functions that all other pieces need to implement, and data that all other pieces need (lke position on the board)
+
+3)A static class cannot be extended (be a superclass) or instantiated unlike a regular class
+
+4)An internal access modifier allows for access only within the same scope (assembley)
+
