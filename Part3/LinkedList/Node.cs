@@ -1,4 +1,4 @@
-namespace LinkedList
+namespace LinkedListHW
 {
   public class Node
   {
@@ -32,5 +32,9 @@ namespace LinkedList
       this.Next = next;
     }
 
+    public override String ToString()
+    {
+      return String.Format("val:{0}, next:{1}", this.Value, this.Next == null ? null : this.Next.Value);
+    }
   }
 }

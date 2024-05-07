@@ -1,10 +1,12 @@
-namespace LinkedList
+using System.Text;
+
+namespace LinkedListHW
 {
   public class LinkedList
   {
 
-    public Node? Head;
-    public Node? Tail;
+    private Node? Head;
+    private Node? Tail;
     private Node? Max;
     private Node? Min;
     public LinkedList() { }
@@ -64,7 +66,7 @@ namespace LinkedList
     public int Unqueue()
     {
       int val = this.Head.GetValue();
-      this.Head.SetNext(this.Head.GetNext());
+      this.Head = this.Head.GetNext();
       UpdateMinMax();
       return val;
     }
@@ -88,9 +90,9 @@ namespace LinkedList
 
       while (hare != null && hare.GetNext() != null)
       {
-        if (tortoise == hare) return true;
         tortoise = tortoise.GetNext();
         hare = hare.GetNext().GetNext();
+        if (tortoise == hare) return true;
       }
 
       return false;
@@ -124,26 +126,28 @@ namespace LinkedList
        *  }
        * */
       //approach 2
+      bool swapped;
+      Node current;
 
-      if (this.Head == null || this.Head.GetNext() == null) return;
-      //implement bubblesort
-      Node i = this.Head, j = this.Head.GetNext();
-      while (i != null)
+      if (this.Head == null)
+        return;
+
+      do
       {
-        while (j != null)
+        swapped = false;
+        current = this.Head;
+
+        while (current.GetNext() != null)
         {
-
-          if (i.GetValue() > j.GetValue())
+          if (current.GetValue() > current.GetNext().GetValue())
           {
-            Swap(ref this.Head, ref i, ref j);
+            Swap(current, current.GetNext());
+            swapped = true;
           }
-
-
-          j = j.GetNext();
+          current = current.GetNext();
         }
-        i = i.GetNext();
-        j = i.GetNext();
-      }
+      } while (swapped);
+      UpdateMinMax();
     }
 
     public Node GetMaxNode()
@@ -155,30 +159,18 @@ namespace LinkedList
       return this.Min;
     }
 
-    internal void Swap(ref Node head, ref Node swap1, ref Node swap2)// if it was allowed to implement a doubly linked node and list, this would have been an o(1) operation in addition to a few more funcs like Pop
+    internal void Swap(Node swap1, Node swap2)// if it was allowed to implement a doubly linked node and list, this would have been an o(1) operation in addition to a few more funcs like Pop
     {
-      Node swap1Next = swap1.GetNext(), swap2Next = swap2.GetNext();
-      Node swap1Prev = this.Head, swap2Prev = this.Head;
-
-      while (swap1Prev.GetNext() != swap1)
-      {
-        swap1Prev = swap1Prev.GetNext();
-      }
-
-      while (swap2Prev.GetNext() != swap1)
-      {
-        swap2Prev = swap2Prev.GetNext();
-      }
-      swap1.SetNext(swap2Next);
-      swap2.SetNext(swap1Next);
-      swap1Prev.SetNext(swap2);
-      swap2Prev.SetNext(swap1);
+      int tmp = swap2.GetValue();
+      swap2.SetValue(swap1.GetValue());
+      swap1.SetValue(tmp);
     }
 
     internal void UpdateMax()
     {
 
       Node n = this.Head;
+      this.Max = this.Head;
       while (n != null)
       {
         if (this.Max == null || n.GetValue() > this.Max.GetValue())
@@ -191,6 +183,7 @@ namespace LinkedList
     internal void UpdateMin()
     {
       Node n = this.Head;
+      this.Min = this.Head;
       while (n != null)
       {
         if (this.Min == null || n.GetValue() < this.Min.GetValue())
@@ -205,13 +198,35 @@ namespace LinkedList
     {
       UpdateMin();
       UpdateMax();
-
     }
 
     internal void UpdateMinMax(Node n)
     {
       if (this.Max == null || this.Max.GetValue() < n.GetValue()) this.Max = n;
       if (this.Min == null || this.Min.GetValue() > n.GetValue()) this.Min = n;
+    }
+
+    public Node Get(int ind)
+    {
+      Node n = this.Head;
+      while (ind > 0 && n != null)
+      {
+        n = n.GetNext();
+        ind--;
+      }
+      return n;
+    }
+
+    public override String ToString()
+    {
+      StringBuilder bldr = new StringBuilder();
+      foreach (int n in this.ToList())
+      {
+        bldr.Append(String.Format("{0} -> ", n));
+      }
+      bldr.Append("\n");
+      bldr.Append(String.Format("Max:{0}, Min:{1}", this.Max, this.Min));
+      return bldr.ToString();
     }
   }
 }
