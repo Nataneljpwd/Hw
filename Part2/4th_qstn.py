@@ -20,16 +20,16 @@ def main():
 def input_numbers() -> Tuple[list[float], int, float]:
     """Returns a tuple containing the list of numbers. the number or positive numbers and the sum of all numbers"""
     a = float(input("Enter a number: "))
-    lst = []
+    input_lst = []
     num_pos_numbers = 0
     sum = 0.0
     while a != -1:
-        lst.append(a)
+        input_lst.append(a)
         if a > 0:
             num_pos_numbers += 1
         sum += a
         a = float(input("Enter a number: "))
-    return (lst, num_pos_numbers, sum)
+    return (input_lst, num_pos_numbers, sum)
 
 if __name__ == "__main__":
     main()

@@ -9,7 +9,10 @@ namespace NumericalExpressionHW
     /// The Function that Translates the numbers (0-19)
     private Func<long, String> NumberTranslator;
     ///Translates the tens (10-90)
+    ///receives the number /10 -1
     private Func<long, String> NumberTensTranslator;
+    ///Translates number powers (100, 1000, 1000000...)
+    ///receives the log10 of the number
     private Func<long, String> NumberThouTranslator;
     private String ConnectorWord = "and";
     public NumericalExpression(long number)

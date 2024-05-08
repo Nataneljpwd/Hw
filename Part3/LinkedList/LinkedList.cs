@@ -7,33 +7,38 @@ namespace LinkedListHW
 
     private Node? Head;
     private Node? Tail;
-    private Node? Max;
-    private Node? Min;
+    private Node? MaxNode;
+    private Node? MinNode;
     public LinkedList() { }
 
     public void Append(int val)
     {
-      Node nn = new Node(val);
-      UpdateMinMax(nn);
+      Node nodeToAppend = new Node(val);
+
+      UpdateMinMaxNodes(nodeToAppend);
+
       if (this.Head == null)
       {
-        this.Head = nn;
-        this.Tail = nn;
+        this.Head = nodeToAppend;
+        this.Tail = nodeToAppend;
       }
       else
       {
         if (this.Tail == null) throw new NullReferenceException("Tail was null");// should never happen
-        this.Tail.SetNext(nn);
-        this.Tail = nn;
+        this.Tail.SetNext(nodeToAppend);
+        this.Tail = nodeToAppend;
       }
     }
     public void Prepend(int val)
     {
-      Node nn = new Node(val);
-      UpdateMinMax(nn);
-      if (this.Max == null || this.Max.GetValue() < val) this.Max = nn;
-      nn.SetNext(this.Head);
-      this.Head = nn;
+      Node nodeToPrepend = new Node(val);
+
+      UpdateMinMaxNodes(nodeToPrepend);
+
+      if (this.MaxNode == null || this.MaxNode.GetValue() < val) this.MaxNode = nodeToPrepend;
+
+      nodeToPrepend.SetNext(this.Head);
+      this.Head = nodeToPrepend;
     }
 
     public int Pop()
@@ -42,24 +47,31 @@ namespace LinkedListHW
       {
         throw new IndexOutOfRangeException("Tried to pop on an empty list");// in case the list is empty
       }
+
       Node n = this.Head;
+
       if (n.GetNext() == null)
       {
         this.Head = null;
         this.Tail = null;
         return n.GetValue();
       }
+
       while (n.GetNext() != this.Tail)
       {
         n = n.GetNext();
       }
+
       if (n != null)
       {
         n.SetNext(null);
       }
+
       int ret = this.Tail.GetValue();
       this.Tail = n;
-      UpdateMinMax();
+
+      UpdateMinMaxNodes();
+
       return ret;
     }
 
@@ -67,17 +79,21 @@ namespace LinkedListHW
     {
       int val = this.Head.GetValue();
       this.Head = this.Head.GetNext();
-      UpdateMinMax();
+
+      UpdateMinMaxNodes();
+
       return val;
     }
 
     public IEnumerable<int> ToList()
     {
-      Node n = this.Head;
-      while (n != null)
+      Node iterateor = this.Head;
+
+      while (iterateor != null)
       {
-        yield return n.GetValue();
-        n = n.GetNext();
+        yield return iterateor.GetValue();
+
+        iterateor = iterateor.GetNext();
       }
     }
 
@@ -101,30 +117,6 @@ namespace LinkedListHW
     public void Sort()
     {
       //two approaches, either just use an array, sort the array and recostruct or implement bubble sort on the linkedlist
-      /*approach 1
-       * if(this.head==null)return;
-       *  int size = 0;
-       *  Node n = this.head;
-       *  while(n != null){
-       *    n = n.GetNext();
-       *    size++;
-       *  }
-       *  int[] toSort = new int[size];
-       *  n = this.head;
-       *  for(int i=0;i<size;i++){
-       *    toSort[i] = n.GetValue();
-       *    n = n.GetNext();
-       *  }
-       *  Array.sort(toSort);
-       *  //reconstruct the list
-       *  this.head = new Node(toSort(0));
-       *  n = this.head;
-       *  for(int i = 1;i<size;i++){
-       *    Node tmp = new Node(toSort[i]);
-       *    n.SetNext(tmp);
-       *    n = tmp;
-       *  }
-       * */
       //approach 2
       bool swapped;
       Node current;
@@ -147,16 +139,17 @@ namespace LinkedListHW
           current = current.GetNext();
         }
       } while (swapped);
-      UpdateMinMax();
+
+      UpdateMinMaxNodes();
     }
 
     public Node GetMaxNode()
     {
-      return this.Max;
+      return this.MaxNode;
     }
     public Node GetMinNode()
     {
-      return this.Min;
+      return this.MinNode;
     }
 
     internal void Swap(Node swap1, Node swap2)// if it was allowed to implement a doubly linked node and list, this would have been an o(1) operation in addition to a few more funcs like Pop
@@ -170,12 +163,12 @@ namespace LinkedListHW
     {
 
       Node n = this.Head;
-      this.Max = this.Head;
+      this.MaxNode = this.Head;
       while (n != null)
       {
-        if (this.Max == null || n.GetValue() > this.Max.GetValue())
+        if (this.MaxNode == null || n.GetValue() > this.MaxNode.GetValue())
         {
-          this.Max = n;
+          this.MaxNode = n;
         }
         n = n.GetNext();
       }
@@ -183,49 +176,54 @@ namespace LinkedListHW
     internal void UpdateMin()
     {
       Node n = this.Head;
-      this.Min = this.Head;
+      this.MinNode = this.Head;
       while (n != null)
       {
-        if (this.Min == null || n.GetValue() < this.Min.GetValue())
+        if (this.MinNode == null || n.GetValue() < this.MinNode.GetValue())
         {
-          this.Min = n;
+          this.MinNode = n;
         }
         n = n.GetNext();
       }
     }
 
-    internal void UpdateMinMax()
+    internal void UpdateMinMaxNodes()
     {
       UpdateMin();
       UpdateMax();
     }
 
-    internal void UpdateMinMax(Node n)
+    internal void UpdateMinMaxNodes(Node n)
     {
-      if (this.Max == null || this.Max.GetValue() < n.GetValue()) this.Max = n;
-      if (this.Min == null || this.Min.GetValue() > n.GetValue()) this.Min = n;
+      if (this.MaxNode == null || this.MaxNode.GetValue() < n.GetValue()) this.MaxNode = n;
+      if (this.MinNode == null || this.MinNode.GetValue() > n.GetValue()) this.MinNode = n;
     }
 
     public Node Get(int ind)
     {
       Node n = this.Head;
+
       while (ind > 0 && n != null)
       {
         n = n.GetNext();
         ind--;
       }
+
       return n;
     }
 
     public override String ToString()
     {
       StringBuilder bldr = new StringBuilder();
+
       foreach (int n in this.ToList())
       {
         bldr.Append(String.Format("{0} -> ", n));
       }
+
       bldr.Append("\n");
-      bldr.Append(String.Format("Max:{0}, Min:{1}", this.Max, this.Min));
+      bldr.Append(String.Format("Max:{0}, Min:{1}", this.MaxNode, this.MinNode));
+
       return bldr.ToString();
     }
   }

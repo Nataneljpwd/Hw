@@ -23,18 +23,22 @@ namespace Game
       this.Points = 0;
       this.MaxCell = 0;
     }
+
     public GameStatus GetGameStatus()
     {
       return this.GStatus;
     }
+
     public int[,] GetBoard()
     {
       return this.GameBoard;
     }
+
     protected void SetBoard(int[,] b)
     {
       this.GameBoard = b;
     }
+
     public void InitializeStartPos()
     {
       CreateCellAtRandomPlace();
@@ -58,6 +62,7 @@ namespace Game
       CheckGameStatus();
       this.Points += score;
     }
+
     internal void MoveTest(Direction dir)
     {
       if (GStatus == GameStatus.Lose) return;
@@ -108,7 +113,6 @@ namespace Game
 
     private void SetCell(int[] pos, int val)
     {
-      // Console.WriteLine(String.Format("Setting Cell with Value {0} and Pos:({1}, {2}) to {3}", GetCell(pos), pos[0], pos[1], val));
       this.MaxCell = Math.Max(this.MaxCell, val);
       //if this is called the board has changed
       this.HasBoardChanged = true;
@@ -118,6 +122,7 @@ namespace Game
         SetCellEmpty(pos);
       this.GameBoard[pos[0], pos[1]] = val;
     }
+
     private int Merge(Direction dir)
     {
       if (dir == Direction.Up || dir == Direction.Down) return MergeVertical(dir);
@@ -153,8 +158,10 @@ namespace Game
           }
         }
       }
+
       return res;
     }
+
     internal int MergeHorizontal(Direction dir)
     {
 
@@ -187,6 +194,7 @@ namespace Game
 
         }
       }
+
       return res;
     }
 
@@ -221,22 +229,26 @@ namespace Game
     {
       this.EmptyCells = (UInt16)(this.EmptyCells | ConvertPosToUint(pos));// changes the specific int to 1
     }
+
     ///True if Occupied, else false
     internal bool IsCellOccupied(int[] pos)
     {
       return (ConvertPosToUint(pos) & this.EmptyCells) != 0;
     }
+
     internal UInt16 ConvertPosToUint(int[] pos)
     {
       if (pos[0] < 0 || pos[1] < 0) return 0;
       UInt16 res = (UInt16)((1) << (UInt16)TwoDimPosToSingleInt(pos));
+
       return res;
     }
+
     internal int TwoDimPosToSingleInt(int[] pos)
     {
       return pos[0] * SIZE + pos[1];
     }
-    // would convert to an apply func but cant gen enough parameters and dont want to use arrays and stuff for that
+
     internal void MoveVertically(Direction dir)
     {
       int inc = dir == Direction.Up ? 1 : -1;
@@ -253,6 +265,7 @@ namespace Game
         }
       }
     }
+
     internal void MoveHorizontal(Direction dir)
     {
 
@@ -338,7 +351,9 @@ namespace Game
           return false;
         }
       }
+
       return true;
     }
+
   }
 }

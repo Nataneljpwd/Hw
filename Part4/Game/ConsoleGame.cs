@@ -76,18 +76,22 @@ namespace Game
         CheckGameStatus();
       }
     }
+
     public bool IsWin()
     {
       return this.HasWon;
     }
+
     public void PrintWinMessage()
     {
       Console.WriteLine("Congratulations! You won!");
     }
+
     public void PrintLoseMessage()
     {
       Console.WriteLine("You Lost, Better Luck Next time");
     }
+
     internal void RedrawBoard()
     {
       Console.Clear();

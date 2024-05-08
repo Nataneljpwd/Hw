@@ -1,6 +1,4 @@
-
-
-#using the Gregory-Leibniz Series, for each number we need to do one 10^n iterations
+#using the Gregory-Leibniz Series, for each number we need to do one n^10 iterations
 #the alg gives log10(n) (due to rounding errors the alg might give a digit within a range of 1) digits of pi where n is the number of iterations
 # definatelly not the most efficient way but a neat oneliner
 #runs in O(n^10)
