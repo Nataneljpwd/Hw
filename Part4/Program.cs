@@ -1,2 +1,13 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using Game;
+
+public class Program
+{
+  public static void Main()
+  {
+    ConsoleGame game = new ConsoleGame();
+    game.InitializeGame();
+    game.StartGame();
+    if (game.IsWin()) game.PrintWinMessage();
+    else game.PrintLoseMessage();
+  }
+}
