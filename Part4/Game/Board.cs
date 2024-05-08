@@ -9,12 +9,17 @@ namespace Game
     private int[,] GameBoard;// 0 is empty
     private UInt16 EmptyCells;// 0 if empty, 1 if occupied
     private int Points;
+    private GameStatus GStatus;
+    private int MaxCell;
+    private bool HasBoardChanged;// update this after every move instead of hashing
 
     public Board()
     {
       this.GameBoard = new int[SIZE, SIZE];
       this.EmptyCells = UInt16.MaxValue;
+      this.GStatus = GameStatus.Idle;
       this.Points = 0;
+      this.MaxCell = 0;
     }
     public int[,] GetBoard()
     {
@@ -32,6 +37,7 @@ namespace Game
 
     public void Move(Direction dir)
     {
+      if (GStatus == GameStatus.Lose) return;
       //move once to the desired side
       if (dir == Direction.Up || dir == Direction.Down) MoveVertically(dir);
       else MoveHorizontal(dir);
@@ -40,6 +46,8 @@ namespace Game
       //move again to the same side
       if (dir == Direction.Up || dir == Direction.Down) MoveVertically(dir);
       else MoveHorizontal(dir);
+      //check the game status
+      CheckGameStatus();
       //create a random cell somewhere
       CreateCellAtRandomPlace();
 
@@ -53,6 +61,9 @@ namespace Game
 
     private void SetCell(int[] pos, int val)
     {
+      this.MaxCell = Math.Max(this.MaxCell, val);
+      //if this is called the board has changed
+      this.HasBoardChanged = true;
       if (GetCell(pos) != 0)
         SetCellOccupied(pos);
       else
@@ -130,6 +141,33 @@ namespace Game
         }
       }
       return res;
+    }
+
+    internal void CheckGameStatus()
+    {
+      //we check the game status
+      //if all the rows and colls are occupied and we cannot make a move (the baord stays the same after move) then its a lose
+      this.HasBoardChanged = false;//reset the variable 
+      if (IsGameLost()) this.GStatus = GameStatus.Lose;
+      if (this.MaxCell == 2048) this.GStatus = GameStatus.Win;
+    }
+
+    internal bool IsGameLost()
+    {
+      int res = 0;
+      for (int i = 0; i < SIZE; i++)
+      {
+        if (IsColFull(i) && IsRowFull(i)) res++;
+      }
+      //we try and make a move
+      int[,] boardStateSave = this.GameBoard.Clone() as int[,];
+      //we try all the moves
+      foreach (Direction dir in Enum.GetValues(typeof(Direction)))
+      {
+        Move(dir);
+      }
+      this.GameBoard = boardStateSave;     //first we save some kind of hash for the board so that we know the prev status
+      return res == SIZE && !this.HasBoardChanged;
     }
 
     internal void SetCellOccupied(int[] pos)
@@ -211,29 +249,29 @@ namespace Game
       this.SetCell(UInt16ToPosArr(empty), sc);
     }
 
-    // internal bool IsRowFull(int row)
-    // {
-    //   for (int col = 0; col < SIZE; col++)
-    //   {
-    //     if (!IsCellOccupied(new int[] { row, col }))
-    //     {
-    //       return false;
-    //     }
-    //   }
-    //   return true;
-    // }
+    internal bool IsRowFull(int row)
+    {
+      for (int col = 0; col < SIZE; col++)
+      {
+        if (!IsCellOccupied(new int[] { row, col }))
+        {
+          return false;
+        }
+      }
+      return true;
+    }
 
-    // internal bool IsColFull(int col)
-    // {
-    //   for (int row = 0; row < SIZE; row++)
-    //   {
-    //     if (!IsCellOccupied(new int[] { row, col }))
-    //     {
-    //       return false;
-    //     }
-    //   }
-    //   return true;
-    // }
+    internal bool IsColFull(int col)
+    {
+      for (int row = 0; row < SIZE; row++)
+      {
+        if (!IsCellOccupied(new int[] { row, col }))
+        {
+          return false;
+        }
+      }
+      return true;
+    }
 
   }
 }
