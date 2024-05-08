@@ -182,26 +182,3 @@ namespace NumericalExpressionHW
 
   }
 }
-
-// if (num < 100)
-// {
-//   if (num < 20)
-//   {
-//     bldr.Append(this.TranslateNumber(num));
-//   }
-//   else
-//   {
-//     //the number is the tens
-//     bldr.Append(this.TranslateNubmerTens(num));
-//     if (num % 10 != 0)
-//     {
-//       bldr.Append(this.TranslateNumber(num));
-//     }
-//   }
-// }
-// else
-// {
-//   // the number is hundreds or above
-//   int pow = (int)Math.Log10(num);
-//   
-// }
