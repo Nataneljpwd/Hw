@@ -5,16 +5,20 @@ namespace NumericalExpressionHW
 
   public class NumericalExpression
   {
+    
     private long Number;
     /// The Function that Translates the numbers (0-19)
     private Func<long, String> NumberTranslator;
+    
     ///Translates the tens (10-90)
     ///receives the number /10 -1
     private Func<long, String> NumberTensTranslator;
+    
     ///Translates number powers (100, 1000, 1000000...)
     ///receives the log10 of the number
     private Func<long, String> NumberThouTranslator;
     private String ConnectorWord = "and";
+    
     public NumericalExpression(long number)
     {
       this.Number = number;
@@ -37,6 +41,7 @@ namespace NumericalExpressionHW
     {
       this.NumberThouTranslator = translator;
     }
+    
     public void SetConnectorWord(String word)
     {
       this.ConnectorWord = word;
@@ -51,6 +56,7 @@ namespace NumericalExpressionHW
     {
       return this.NumberToWords(num).Length;
     }
+    
     //would do static but assignment did not ask for it so it is non static
     //Overloading (having the same name with different params)
     public int SumLetters(NumericalExpression n)
@@ -143,20 +149,20 @@ namespace NumericalExpressionHW
       return a;
     }
 
-    internal String TranslateNumber(long i)
+    internal String TranslateNumber(long num)
     {
-      if (i > 19) throw new InvalidDataException("Invalid number, The translateNumber function should take numbers from 0 to 19 inclusive");
+      if (num > 19) throw new InvalidDataException("Invalid number, The translateNumber function should take numbers from 0 to 19 inclusive");
       String[] ones = new String[] { "Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
-      return ones[i];
+      return ones[num];
     }
 
-    internal String TranslateNubmerTens(long i)
+    internal String TranslateNubmerTens(long tensOfNum)
     {
       String[] tens = new String[] { "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
-      return tens[i];
+      return tens[tensOfNum];
     }
-    ///i is the log10 of the number
-    internal String TranslateNumberThou(long i)
+    
+    internal String TranslateNumberThou(long logTenOfNumber)
     {
 
       Dictionary<long, String> map = new Dictionary<long, String>();
@@ -165,7 +171,7 @@ namespace NumericalExpressionHW
       map[6] = "Million";
       map[9] = "Billion";
       map[12] = "Trillion";
-      return map[i];
+      return map[logTenOfNumber];
 
     }
 
